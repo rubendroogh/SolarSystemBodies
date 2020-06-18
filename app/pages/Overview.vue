@@ -1,6 +1,6 @@
 <template>
-	<Page>
-		<ActionBar title="My App" />
+	<Page androidStatusBarBackground="#121212">
+		<ActionBar title="Ruimtekiekert" backgroundColor="#121212"/>
 		<TabView androidTabsPosition="bottom">
 			<TabViewItem title="All current positions">
 				<StackLayout>
@@ -163,7 +163,7 @@ export default {
 	margin-left: 10;
   }
   .solarsystem{
-	  border-width: .5;
+	  border-width: 2;
 	  border-color: #151515
   }
   .sun{
