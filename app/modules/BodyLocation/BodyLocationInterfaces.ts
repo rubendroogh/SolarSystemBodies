@@ -1,5 +1,5 @@
 import { IGeolocation } from '../GeoLocation/GeolocationService'
-import { Body } from '../BodyLocation/BodyLocationService'
+import { Body, DistanceUnit } from '../BodyLocation/BodyLocationService'
 
 export interface ISpatialCoordinates {
     x: number,
@@ -24,13 +24,16 @@ export interface IAzimuthalCoordinates {
 
 // All available info from a body, in one handy package!
 export interface IBodyInfo {
+    body: Body,
     distanceToSun: number,
     distanceToEarth: number,
+    distanceUnit: DistanceUnit,
     magnitude: IMagnitude,
     riseSetTimes: IRiseSetTimes,
     eclipticalCoordinates: ISpatialCoordinates,
     equatorialCoordinates: IEquatorialCoordinates,
     azimuthalCoordinates: IAzimuthalCoordinates,
+    heliocentricCoordinates: ISpatialCoordinates,
     orbitalElements: IOrbitalElements
 }
 

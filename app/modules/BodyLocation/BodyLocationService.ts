@@ -25,8 +25,12 @@ export enum Body {
     Neptune
 }
 
-export default abstract class BodyLocationService {
+export enum DistanceUnit {
+    AU,
+    EarthRadii
+}
 
+export default abstract class BodyLocationService {
     // 1 Januari 2000 12:00 is day number 0.0
     // To test: 19 april 1990, at 0:00 UT = -3543
     public static getDayNumber(date: Date): IDayNumberCollection {
@@ -72,14 +76,13 @@ export default abstract class BodyLocationService {
         )
         var equatorialCoords = this.eclipticalCoordsToEquatorialCoords(ecl, geocentricRectangular)
         var azimuthalCoordinates = this.equatorialCoordsToAzimuthalCoords(localSiderealTime, equatorialCoords, localPosition)
+        var distanceUnit = (body == Body.Moon) ? DistanceUnit.EarthRadii : DistanceUnit.AU
 
         return {
+            body: body,
+            distanceUnit: distanceUnit,
             distanceToSun: spatialPosition.distanceToMainBody,
             distanceToEarth: equatorialCoords.geocentricDistance,
-            eclipticalCoordinates: geocentricRectangular,
-            equatorialCoordinates: equatorialCoords,
-            azimuthalCoordinates: azimuthalCoordinates,
-            orbitalElements: OE,
             magnitude: {
                 apparentDiameter: 0,
                 phaseAngle: 0,
@@ -88,7 +91,12 @@ export default abstract class BodyLocationService {
             riseSetTimes: {
                 riseTime: new Date(),
                 setTime: new Date()
-            }
+            },
+            eclipticalCoordinates: geocentricRectangular,
+            equatorialCoordinates: equatorialCoords,
+            azimuthalCoordinates: azimuthalCoordinates,
+            heliocentricCoordinates: spatialPosition.heliocentricCoordinates,
+            orbitalElements: OE
         }
     }
 
@@ -124,10 +132,20 @@ export default abstract class BodyLocationService {
         var lonEcl = Math.atan2(yPos, xPos)
         var latEcl = Math.atan2(zPos, Math.sqrt(xPos * xPos + yPos *yPos))
 
+        // TODO: get heliocentric position correctly for the moon
+        // if (body == Body.Moon) {
+        //     xPos = xPos - 
+        // }
+
         return {
             distanceToMainBody: distanceToMainBody,
             lonEcl: lonEcl,
-            latEcl: latEcl
+            latEcl: latEcl,
+            heliocentricCoordinates: {
+                x: xPos,
+                y: yPos,
+                z: zPos
+            }
         }
     }
 
@@ -242,7 +260,7 @@ export default abstract class BodyLocationService {
     public static calculateSiderealTime(d: IDayNumberCollection, meanAnomaly: number, perihelionArgument: number, longitude: number): number {
         var meanLongSun = meanAnomaly + perihelionArgument
 
-        // gmst = Greenwich Mean Sideral Time
+        // gmst = Greenwich Mean Sidereal Time
         var gmst0 = meanLongSun + 180 // (degrees)
         var gmst = gmst0 + d.decimalTime
         var sideRealTime = gmst + longitude
@@ -253,17 +271,6 @@ export default abstract class BodyLocationService {
     // Calculate apparent size and brightness
     public static calculateMagnitude(): IMagnitude {
         throw "Not implemented"
-    }
-
-    public static getHeliocentricPosition(body: Body, d: IDayNumberCollection): ISpatialCoordinates {
-
-
-        return {
-            x: 0,
-            y: 0,
-            z: 0,
-            center: Body.Sun
-        }
     }
 
     // Get planet data from BodyLocationConstants.ts
