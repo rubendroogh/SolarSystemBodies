@@ -1,42 +1,44 @@
 <template>
 	<Page>
-	  <TabView androidTabsPosition="bottom">
-		<TabViewItem title="All current positions">
-		  <StackLayout>
-			<AbsoluteLayout id="solarSystem" minHeight="500">
-			  <Label
-				class="sun"
-				:left="screen.widthDIPs / 2"
-				:top="screen.heightDIPs / 3"
-			  />
-			  <Label
-				v-for="(body, index) in allBodyPoints" v-bind:key="`b-${index}`" class="planet"
-				:left="(body.heliocentricCoordinates.x * 5) + (screen.widthDIPs / 2)"
-				:top="(body.heliocentricCoordinates.y * 5) + (screen.heightDIPs / 3)"
-				:backgroundColor="body.color"
-			  />
-			</AbsoluteLayout>
-			<Slider value="50" @valueChange="onZoomLevelChanged" />
-		  </StackLayout>
-		</TabViewItem>
-		<TabViewItem title="Single body info">
-		  <StackLayout>
-			<Label fontSize="20" textDecoration="underline" text="Info" />
-			<Label :text="'Location: ' + locationName" />
-			<Label :text="'Day number: ' + dayNumber" />
-			<Label :text="'Distance to Sun: ' + bodyInfo.distanceToSun" />
-			<Label :text="'Distance to Earth: ' + bodyInfo.distanceToEarth" />
-			<Label fontSize="20" textDecoration="underline" text="Body" />
-			<TextField v-model="stringBody" />
-			<Label fontSize="20" textDecoration="underline" text="Date" />
-			<DatePicker v-model="selectedDate" />
-			<GridLayout columns="*, *" rows="*">
-			  <Button col="0" text="Current date/time" @tap="getCoords(true)" margin="5" />
-			  <Button col="1" text="Input date" @tap="getCoords(false)" margin="5" />
-			</GridLayout>
-		  </StackLayout>
-		</TabViewItem>
-	  </TabView>
+		<ActionBar title="My App" />
+		<TabView androidTabsPosition="bottom">
+			<TabViewItem title="All current positions">
+				<StackLayout>
+					<AbsoluteLayout id="solarSystem" class="solarsystem" minHeight="500">
+						<Label
+							class="sun"
+							:left="screen.widthDIPs / 2"
+							:top="screen.heightDIPs / 3"
+						/>
+						<Label
+							v-for="(body, index) in allBodyPoints" v-bind:key="`b-${index}`" class="planet"
+							:left="(body.heliocentricCoordinates.x * 5) + (screen.widthDIPs / 2)"
+							:top="(body.heliocentricCoordinates.y * 5) + (screen.heightDIPs / 3)"
+							:backgroundColor="body.color"
+						/>
+					</AbsoluteLayout>
+					<Label class="dont-use-slider" text="Don't use this slider, the app will crash lmao"/>
+					<Slider value="50" @valueChange="onZoomLevelChanged" />
+		  		</StackLayout>
+			</TabViewItem>
+			<TabViewItem title="Single body info">
+				<StackLayout>
+					<Label fontSize="20" textDecoration="underline" text="Info" />
+					<Label :text="'Location: ' + locationName" />
+					<Label :text="'Day number: ' + dayNumber" />
+					<Label :text="'Distance to Sun: ' + bodyInfo.distanceToSun" />
+					<Label :text="'Distance to Earth: ' + bodyInfo.distanceToEarth" />
+					<Label fontSize="20" textDecoration="underline" text="Body" />
+					<TextField v-model="stringBody" />
+					<Label fontSize="20" textDecoration="underline" text="Date" />
+					<DatePicker v-model="selectedDate" />
+					<GridLayout columns="*, *" rows="*">
+						<Button col="0" text="Current date/time" @tap="getCoords(true)" margin="5" />
+						<Button col="1" text="Input date" @tap="getCoords(false)" margin="5" />
+					</GridLayout>
+		  		</StackLayout>
+			</TabViewItem>
+	  	</TabView>
 	</Page>
 </template>
 
@@ -160,6 +162,10 @@ export default {
   .header{
 	margin-left: 10;
   }
+  .solarsystem{
+	  border-width: .5;
+	  border-color: #151515
+  }
   .sun{
 	border-radius: 5;
 	background-color: #f3b711;
@@ -171,5 +177,9 @@ export default {
 	border-radius: 5;
 	width: 7;
 	height: 7;
+  }
+  .dont-use-slider{
+	text-align: center;
+	width: 100%;
   }
 </style>
