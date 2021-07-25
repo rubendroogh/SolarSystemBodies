@@ -1,6 +1,6 @@
-# Clear Night Sky
+# Solar system position
 
-> The newest version of Clear Night Sky!
+> A tool to calculate the position of the solar system bodies using a date and time.
 
 ## Usage
 
